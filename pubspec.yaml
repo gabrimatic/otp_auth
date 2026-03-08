@@ -9,7 +9,7 @@ topics:
   - totp
   - hotp
   - authenticator
-  - 2fa
+  - two-factor-auth
 funding:
   - https://www.buymeacoffee.com/gabrimatic
 
