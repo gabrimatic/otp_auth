@@ -73,4 +73,37 @@ void main() {
       expect(code.length, equals(8));
     });
   });
+
+  group('HOTP Base32 constructor', () {
+    test('produces same output as fromBytes', () {
+      final fromBytes = HOTP.fromBytes(secret: secret);
+      // Base32 of '12345678901234567890' is GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ
+      final fromBase32 =
+          HOTP(secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ');
+      expect(fromBase32.at(0), equals(fromBytes.at(0)));
+      expect(fromBase32.at(7), equals(fromBytes.at(7)));
+    });
+  });
+
+  group('HOTP validation', () {
+    test('throws on digits < 1', () {
+      expect(
+        () => HOTP.fromBytes(secret: secret, digits: 0),
+        throwsA(isA<RangeError>()),
+      );
+    });
+
+    test('throws on digits > 8', () {
+      expect(
+        () => HOTP.fromBytes(secret: secret, digits: 9),
+        throwsA(isA<RangeError>()),
+      );
+    });
+
+    test('verify clamps negative counter window to 0', () {
+      final hotp = HOTP.fromBytes(secret: secret);
+      // counter=0, window=3 should not go negative
+      expect(hotp.verify('755224', 0, window: 3), isTrue);
+    });
+  });
 }

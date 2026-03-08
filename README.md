@@ -15,10 +15,10 @@ dependencies:
 import 'package:otp_auth/otp_auth.dart';
 
 final totp = TOTP(secret: 'JBSWY3DPEHPK3PXP');
-print(totp.now());              // '492039'
-print(TOTP.format(totp.now())); // '492 039'
+print(totp.now());              // e.g. '492039'
+print(TOTP.format(totp.now())); // e.g. '492 039'
 print(totp.remaining);          // seconds until expiry
-print(totp.verify('492039'));    // true or false
+print(totp.verify('492039'));    // true if current code matches
 ```
 
 ## API

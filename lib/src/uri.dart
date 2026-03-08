@@ -28,7 +28,7 @@ class OTPUri {
   /// Counter value (HOTP only).
   final int? counter;
 
-  const OTPUri({
+  OTPUri({
     required this.type,
     required this.secret,
     this.account,
@@ -37,7 +37,11 @@ class OTPUri {
     this.digits = 6,
     this.period = 30,
     this.counter,
-  });
+  }) {
+    if (type != 'totp' && type != 'hotp') {
+      throw ArgumentError.value(type, 'type', 'Must be "totp" or "hotp"');
+    }
+  }
 
   /// Parses an `otpauth://` URI string.
   ///
@@ -136,7 +140,7 @@ class OTPUri {
   @override
   String toString() {
     final label = issuer != null && account != null
-        ? Uri.encodeComponent('$issuer:$account')
+        ? '${Uri.encodeComponent(issuer!)}:${Uri.encodeComponent(account!)}'
         : Uri.encodeComponent(account ?? '');
 
     final params = <String, String>{

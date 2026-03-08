@@ -54,7 +54,8 @@ class HOTP {
   /// Optionally checks [window] values before and after [counter]
   /// to account for synchronization drift.
   bool verify(String code, int counter, {int window = 0}) {
-    for (var i = counter - window; i <= counter + window; i++) {
+    final start = counter - window < 0 ? 0 : counter - window;
+    for (var i = start; i <= counter + window; i++) {
       if (_constantTimeEquals(at(i), code)) return true;
     }
     return false;
@@ -63,12 +64,12 @@ class HOTP {
 
 /// Constant-time string comparison to prevent timing attacks.
 bool _constantTimeEquals(String a, String b) {
-  final length = a.length;
-  // Pad shorter string to avoid leaking length through timing.
+  final length = a.length > b.length ? a.length : b.length;
+  final aPadded = a.padRight(length, '\x00');
   final bPadded = b.padRight(length, '\x00');
   var result = a.length ^ b.length;
   for (var i = 0; i < length; i++) {
-    result |= a.codeUnitAt(i) ^ bPadded.codeUnitAt(i);
+    result |= aPadded.codeUnitAt(i) ^ bPadded.codeUnitAt(i);
   }
   return result == 0;
 }

@@ -101,6 +101,37 @@ void main() {
     });
   });
 
+  group('OTPUri constructor validation', () {
+    test('throws on invalid type', () {
+      expect(
+        () => OTPUri(type: 'motp', secret: 'ABC'),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('accepts totp type', () {
+      expect(OTPUri(type: 'totp', secret: 'ABC').type, equals('totp'));
+    });
+
+    test('accepts hotp type', () {
+      expect(OTPUri(type: 'hotp', secret: 'ABC').type, equals('hotp'));
+    });
+  });
+
+  group('OTPUri toString label encoding', () {
+    test('uses literal colon between issuer and account', () {
+      final uri = OTPUri(
+        type: 'totp',
+        secret: 'JBSWY3DPEHPK3PXP',
+        issuer: 'GitHub',
+        account: 'user@example.com',
+      );
+      final str = uri.toString();
+      // Label should have literal colon, not %3A
+      expect(str, contains('GitHub:user%40example.com'));
+    });
+  });
+
   group('OTPUri toTOTP / toHOTP', () {
     test('toTOTP returns TOTP instance', () {
       final uri =

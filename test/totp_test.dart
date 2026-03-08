@@ -163,4 +163,39 @@ void main() {
       expect(totp.now().length, equals(6));
     });
   });
+
+  group('TOTP Base32 constructor', () {
+    test('produces same output as fromBytes', () {
+      final secret =
+          Uint8List.fromList(utf8.encode('12345678901234567890'));
+      final fromBytes = TOTP.fromBytes(secret: secret);
+      final fromBase32 =
+          TOTP(secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ');
+      final time = DateTime.fromMillisecondsSinceEpoch(59000, isUtc: true);
+      expect(fromBase32.at(time), equals(fromBytes.at(time)));
+    });
+  });
+
+  group('TOTP validation', () {
+    test('throws on period <= 0', () {
+      expect(
+        () => TOTP(secret: 'JBSWY3DPEHPK3PXP', period: 0),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('throws on negative period', () {
+      expect(
+        () => TOTP(secret: 'JBSWY3DPEHPK3PXP', period: -1),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('throws on digits out of range', () {
+      expect(
+        () => TOTP(secret: 'JBSWY3DPEHPK3PXP', digits: 0),
+        throwsA(isA<RangeError>()),
+      );
+    });
+  });
 }
