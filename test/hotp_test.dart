@@ -78,8 +78,7 @@ void main() {
     test('produces same output as fromBytes', () {
       final fromBytes = HOTP.fromBytes(secret: secret);
       // Base32 of '12345678901234567890' is GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ
-      final fromBase32 =
-          HOTP(secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ');
+      final fromBase32 = HOTP(secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ');
       expect(fromBase32.at(0), equals(fromBytes.at(0)));
       expect(fromBase32.at(7), equals(fromBytes.at(7)));
     });
