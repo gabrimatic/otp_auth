@@ -1,3 +1,10 @@
+## 1.0.1
+
+* Fix constant-time comparison to use max length of both strings.
+* Fix URI label encoding to use literal colon per Google Authenticator spec.
+* Add constructor validation for `OTPUri` type, `HOTP`/`TOTP` digits range, and `TOTP` period.
+* Clamp `HOTP.verify` window to avoid negative counter values.
+
 ## 1.0.0
 
 * HOTP generation and verification (RFC 4226).

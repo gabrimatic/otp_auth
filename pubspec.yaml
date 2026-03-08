@@ -1,6 +1,6 @@
 name: otp_auth
 description: A Dart package for generating and verifying HOTP and TOTP one-time passwords using RFC 4226 and RFC 6238.
-version: 1.0.0
+version: 1.0.1
 homepage: https://gabrimatic.info
 repository: https://github.com/gabrimatic/otp_auth
 issue_tracker: https://github.com/gabrimatic/otp_auth/issues
