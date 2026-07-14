@@ -2,7 +2,7 @@
 
 A Dart package for generating and verifying HOTP and TOTP one-time passwords using RFC 4226 and RFC 6238.
 
-[![pub package](https://img.shields.io/pub/v/otp_auth.svg)](https://pub.dev/packages/otp_auth) [![likes](https://img.shields.io/pub/likes/otp_auth)](https://pub.dev/packages/otp_auth/score) [![popularity](https://img.shields.io/pub/popularity/otp_auth)](https://pub.dev/packages/otp_auth/score) [![pub points](https://img.shields.io/pub/points/otp_auth)](https://pub.dev/packages/otp_auth/score)
+[![pub package](https://img.shields.io/pub/v/otp_auth.svg)](https://pub.dev/packages/otp_auth) [![likes](https://img.shields.io/pub/likes/otp_auth)](https://pub.dev/packages/otp_auth/score) [![downloads](https://img.shields.io/pub/dm/otp_auth)](https://pub.dev/packages/otp_auth/score) [![pub points](https://img.shields.io/pub/points/otp_auth)](https://pub.dev/packages/otp_auth/score) [![CI](https://github.com/gabrimatic/otp_auth/actions/workflows/ci.yml/badge.svg)](https://github.com/gabrimatic/otp_auth/actions/workflows/ci.yml)
 
 ## Quick start
 
