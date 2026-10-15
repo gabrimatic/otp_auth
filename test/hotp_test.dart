@@ -105,4 +105,47 @@ void main() {
       expect(hotp.verify('755224', 0, window: 3), isTrue);
     });
   });
+
+  group('HOTP large and negative counters', () {
+    late HOTP hotp;
+
+    setUp(() {
+      hotp = HOTP.fromBytes(secret: secret);
+    });
+
+    // Expected values: HMAC-SHA1 over the 8-byte big-endian counter
+    // (two's complement for negative counters), RFC 4226 truncation.
+    const vectors = <int, String>{
+      4294967295: '117190', // 2^32 - 1, low half only
+      4294967296: '999456', // 2^32, first counter using the high half
+      4294967297: '108930', // 2^32 + 1
+      9007199254740991: '891307', // 2^53 - 1, largest exact integer on web
+      -1: '094451',
+      -9007199254740991: '452964', // -(2^53 - 1)
+    };
+
+    for (final entry in vectors.entries) {
+      test('counter ${entry.key} → ${entry.value}', () {
+        expect(hotp.at(entry.key), equals(entry.value));
+      });
+    }
+
+    test('8-digit code at 2^53 - 1', () {
+      final hotp8 = HOTP.fromBytes(secret: secret, digits: 8);
+      expect(hotp8.at(9007199254740991), equals('41891307'));
+    });
+
+    test('verify across the 2^32 boundary', () {
+      expect(hotp.verify('999456', 4294967295, window: 1), isTrue);
+    });
+
+    test(
+      'rejects counters beyond 2^53 - 1 on the web',
+      () {
+        expect(() => hotp.at(9007199254740992), throwsA(isA<RangeError>()));
+        expect(() => hotp.at(-9007199254740992), throwsA(isA<RangeError>()));
+      },
+      testOn: 'browser',
+    );
+  });
 }

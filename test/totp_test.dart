@@ -135,6 +135,14 @@ void main() {
     });
   });
 
+  group('TOTP large time step', () {
+    test('time=128849018880 (step 2^32) → 999456', () {
+      final secret = Uint8List.fromList(utf8.encode('12345678901234567890'));
+      final totp = TOTP.fromBytes(secret: secret);
+      expect(totp.at(epoch(128849018880)), equals('999456'));
+    });
+  });
+
   group('TOTP utilities', () {
     final secret = Uint8List.fromList(utf8.encode('12345678901234567890'));
     late TOTP totp;

@@ -37,3 +37,15 @@ jobs:
       - run: dart analyze --fatal-infos
       - run: dart test
       - run: dart pub publish --dry-run
+
+  web:
+    name: Test on Chrome
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - run: dart pub get
+      - run: dart test -p chrome

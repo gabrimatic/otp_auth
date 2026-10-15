@@ -32,9 +32,23 @@ class HOTP {
   }
 
   /// Generates the OTP for the given [counter].
+  ///
+  /// The counter is encoded as an 8-byte big-endian value (RFC 4226).
+  /// On the web, integers are only exact up to 2^53 - 1, so a [counter]
+  /// outside -(2^53 - 1) to 2^53 - 1 throws a [RangeError] there.
   String at(int counter) {
+    if (_isWeb && (counter > _maxSafeInt || counter < -_maxSafeInt)) {
+      throw RangeError.range(counter, -_maxSafeInt, _maxSafeInt, 'counter');
+    }
     final hmac = Hmac(algorithm.hash, _secret);
-    final counterBytes = ByteData(8)..setInt64(0, counter);
+    // Two 32-bit halves instead of setInt64, which the web does not support.
+    // Division and modulo, not shifts: bitwise operators truncate to 32 bits
+    // on the web. Same bytes as setInt64 for every counter.
+    final low = counter % _twoPow32;
+    final high = (counter - low) ~/ _twoPow32;
+    final counterBytes = ByteData(8)
+      ..setInt32(0, high)
+      ..setUint32(4, low);
     final hash = hmac.convert(counterBytes.buffer.asUint8List()).bytes;
 
     // Dynamic truncation (RFC 4226 Section 5.4)
@@ -61,6 +75,10 @@ class HOTP {
     return false;
   }
 }
+
+const _twoPow32 = 0x100000000;
+const _maxSafeInt = 9007199254740991; // 2^53 - 1
+const _isWeb = identical(0, 0.0);
 
 /// Constant-time string comparison to prevent timing attacks.
 bool _constantTimeEquals(String a, String b) {
