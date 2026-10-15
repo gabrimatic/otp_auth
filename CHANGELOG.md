@@ -1,3 +1,9 @@
+## 1.0.3
+
+* fix: HOTP/TOTP generation and verification threw on web because of ByteData.setInt64.
+  The counter is now written as two 32-bit halves, giving the same bytes on the VM.
+  On the web, counters outside -(2^53 - 1) to 2^53 - 1 throw a `RangeError`.
+
 ## 1.0.2
 
 * Declare the real minimum Dart SDK (3.4, required by `crypto` 3.0.7).

@@ -8,7 +8,7 @@ A Dart package for generating and verifying HOTP and TOTP one-time passwords usi
 
 ```yaml
 dependencies:
-  otp_auth: ^1.0.2
+  otp_auth: ^1.0.3
 ```
 
 ```dart
