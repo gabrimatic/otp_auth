@@ -1,3 +1,9 @@
+## 1.0.2
+
+* Declare the real minimum Dart SDK (3.4, required by `crypto` 3.0.7).
+* Update dev dependencies to `lints` 6 and `test` 1.33.
+* Tidy the example's lint suppressions.
+
 ## 1.0.1
 
 * Fix constant-time comparison to use max length of both strings.

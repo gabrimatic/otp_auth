@@ -32,7 +32,8 @@ lib/
 ## PR checklist
 
 - One feature or fix per PR. Keep scope tight.
-- `dart analyze` must pass with no issues.
+- `dart format lib test example` leaves no changes.
+- `dart analyze --fatal-infos` must pass with no issues.
 - `dart test` must pass with no failures.
 - Update `CHANGELOG.md` if the change is user-facing.
 - Do not bump version numbers — that is handled during release.
