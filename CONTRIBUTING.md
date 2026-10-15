@@ -10,6 +10,8 @@ cd otp_auth
 dart pub get
 ```
 
+The package supports Dart 3.4 and later, but its dev dependencies (`test` 1.33, `lints` 6.1) need Dart 3.11 or later to develop and run the tests.
+
 Run the tests:
 
 ```bash

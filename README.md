@@ -18,7 +18,7 @@ final totp = TOTP(secret: 'JBSWY3DPEHPK3PXP');
 print(totp.now());              // e.g. '492039'
 print(TOTP.format(totp.now())); // e.g. '492 039'
 print(totp.remaining);          // seconds until expiry
-print(totp.verify('492039'));    // true if current code matches
+print(totp.verify('492039'));   // true if the code matches the current step, or one step either side
 ```
 
 ## API
@@ -67,6 +67,12 @@ print(totp.now());
 // Extract just the secret from any otpauth:// URI
 final secret = OTPUri.extractSecret('otpauth://totp/...?secret=ABC123');
 ```
+
+## Security notes
+
+- **Validation window.** `TOTP.verify` accepts the previous, current and next time step by default (`window: 1`). Pass `window: 0` for strict checking. `HOTP.verify` checks only the given counter by default; a nonzero `window` checks counters on both sides, so it can also accept codes for counters already used.
+- **Replay protection.** The package is stateless and never records used codes, and `verify` returns only `true` or `false`. A TOTP code stays valid for its whole window, so store the last accepted time step per user and reject any code for that step or an earlier one. For HOTP, persist the counter and move it past the accepted value after each successful check. With a `window`, compare against `at()` for each candidate step or counter to learn which one matched.
+- **Secrets.** Generate them with `Random.secure()` (at least 20 bytes for SHA-1, as RFC 4226 recommends), keep them server-side, and never log them. An `otpauth://` URI embeds the secret, so treat the URI and any QR code made from it as a secret too.
 
 ## RFC compliance
 
